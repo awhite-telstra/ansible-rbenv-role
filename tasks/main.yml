@@ -32,6 +32,8 @@
     - rbenv
 
 - include: system_install.yml
+  static: false
   when: rbenv.env == "system"
 - include: user_install.yml
+  static: false
   when: rbenv.env != "system"
