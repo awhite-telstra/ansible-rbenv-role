@@ -9,6 +9,8 @@
     - zlib-devel
     - libffi-devel
     - git
+    - patch
+    - patchutils
   become: true
   tags:
     - rbenv
