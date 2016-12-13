@@ -38,9 +38,23 @@
   tags:
     - rbenv
 
-- name: add rbenv initialization to profile system-wide
-  template: src=rbenv_user.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
+
+- name: add rbenv initialization to $HOME
+  template: src=rbenv_user.sh.j2 dest=~/.rbenv/bin/rbenv.sh owner={{ item }} group={{ item }} mode=0755
+  with_items: "{{ rbenv_users }}"
   become: yes
+  become_user: "{{ item }}"
+  when:
+    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
+  tags:
+    - rbenv
+
+- lineinfile:
+  dest: ~/.bashrc
+  with_items: "{{ rbenv_users }}"
+  become: yes
+  become_user: "{{ item }}"
+  line: 'source ~/.rbenv/bin/rbenv.sh'
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
   tags:
