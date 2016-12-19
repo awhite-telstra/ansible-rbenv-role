@@ -50,11 +50,11 @@
     - rbenv
 
 - lineinfile:
-  with_items: "{{ rbenv_users }}"
-  become: yes
-  become_user: "{{ item }}"
     dest: ~/.bashrc
     line: 'source ~/.rbenv/bin/rbenv.sh'
+  become: yes
+  become_user: "{{ item }}"
+  with_items: "{{ rbenv_users }}"
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
   tags:
