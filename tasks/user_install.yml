@@ -85,25 +85,33 @@
 - name: create tempfile for gemrc
   shell: mktemp
   register: tempfile
+  tags:
+    - gemrc
 
 - name: create gemrc
-  lineinfile: dest={{ tempfile.stdout }} line={{ item }} create=yes state=present
+  lineinfile: dest={{ tempfile.stdout }} line={{ item }} create=yes state=present mode=0644
   with_items:
     - "{{ gemrc }}"
+  tags:
+    - gemrc
 
 - name: set gemrc for select users
-  copy: src={{ tempfile.stdout }} dest=~{{ item }}/.gemrc owner={{ item }}
+  shell: cp {{ tempfile.stdout }} ~{{ item }}/.gemrc && chmod 644 ~{{ item }}/.gemrc && chown {{ item }} ~{{ item }}/.gemrc
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
   tags:
     - rbenv
+  tags:
+    - gemrc
 
 - name: Remove tempfile
   file:
     path: "{{ tempfile.stdout }}"
     state: absent
+  tags:
+    - gemrc
 
 - name: set vars for select users
   copy: src=vars dest={{ rbenv_root }}/vars
