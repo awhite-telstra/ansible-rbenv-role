@@ -18,3 +18,10 @@ rbenv_plugins:
 rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
 rbenv_users: []
+gemrc: [
+  '---',
+  ':sources:',
+  '- https://rubygems.org',
+  'install: --no-document',
+  'update: --no-document'
+]
