@@ -103,7 +103,6 @@
   ignore_errors: yes
   tags:
     - rbenv
-  tags:
     - gemrc
 
 - name: Remove tempfile
